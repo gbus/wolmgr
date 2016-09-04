@@ -1,1 +1,37 @@
-Data {{ hosts }}!
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+	<head>
+		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+		<title>Select test</title>
+		<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
+		<script type="text/javascript" charset="utf-8">
+/*$.post("localhost:8080/api",
+  function(wol_hosts) {
+    var sel = $("#select");
+    sel.empty();
+    for (var i=0; i<wol_hosts.length; i++) {
+      sel.append('<option value="' + wol_hosts[i].name + '">' + wol_hosts[i].mac + '</option>');
+    }
+  }, "json");*/
+
+$.getJSON("localhost:8080/api", function(json) {
+    $('#sel_host').empty(); // Remove all <option> child tags.
+    $('#sel_host').append($('<option>').text("Select"));
+
+    $.each(json, function(index, obj) { // Iterates through a collection
+        $("#sel_host").append( // Append an object to the inside of the select box
+            $("<sel_host>").text(obj.name).attr("value", obj.mac))
+        );
+    });
+});
+		</script>
+	</head>
+	<body>
+		<select id="sel_host">
+
+		</select>
+
+	</body>
+</html>
+

@@ -6,7 +6,7 @@ import os, os.path
 class Wol(object):
     @cherrypy.expose
     def index(self):
-        return open('templates/index.html')
+        return open('pages/index.html')
         
         
 class WolWebService(object):
