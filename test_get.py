@@ -1,7 +1,10 @@
 import cherrypy
 from config import wol_hosts
 import os, os.path
+import json
 
+def CORS():
+    cherrypy.response.headers["Access-Control-Allow-Origin"] = "*"
 
 class Wol(object):
     @cherrypy.expose
@@ -32,14 +35,17 @@ if __name__ == '__main__':
     conf = {
         '/': {
             'tools.sessions.on': True,
-            'tools.staticdir.root': os.path.abspath(os.getcwd())
+            'tools.staticdir.root': os.path.abspath(os.getcwd()),
+            'tools.CORS.on': True,
         },
         '/api': {
             'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
             'tools.response_headers.on': True,
             'tools.response_headers.headers': [('Content-Type', 'text/plain')],
+            'tools.CORS.on': True,
         },     
     }
+    cherrypy.tools.CORS = cherrypy.Tool('before_handler', CORS)
     webapp = Wol()
     webapp.api = WolWebService()
     cherrypy.quickstart(webapp, '/', conf)
