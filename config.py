@@ -22,7 +22,7 @@ wol_hosts = [
       "name": "mediapc",
       "mac": "84:2b:2b:b1:71:b6",
       "ip": "192.168.0.72",
-      "mgt_type": "ssh_sudo_nopwd"
+      "mgt_type": "ssh_sudo"
     },
 ]
 
