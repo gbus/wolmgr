@@ -17,7 +17,52 @@
 
     <link href="jumbotron-narrow.css" rel="stylesheet">
 
+    <script type="text/javascript">
+      $(document).ready(function() {
 
+        $("#srv_power").click(function(e) {
+          $.post("http://localhost:8080/wol/srv/TurnOn", {"length": $("input[name='length']").val()})
+           .done(function(string) {
+            $("#the-string").show();
+            $("#the-string input").val(string);
+          });
+          e.preventDefault();
+        });
+
+        /*
+        When a panel is open, check host status and accordingly change status
+        */
+        $('.panel-collapse').on('show.bs.collapse', function (e) {
+            var $target_id = e.currentTarget.id;
+            $.getJSON("http://localhost:8080/wol/" + $target_id, function(data) {
+                var $status_level = "default";
+                if (data['status'] == "On") {
+                    $status_level = "success";
+                } else if (data['status'] == "Off") {
+                    $status_level = "warning";
+
+                } else {
+                    $status_level = "danger";
+                }
+                $("button#"+$target_id+"_status").attr('class', 'btn btn-'+$status_level);
+                $("button#"+$target_id+"_status").text(data['status']);
+            })
+        })
+        
+        
+        /*
+        When a panel is closed, reset interface to default, ready for next open and check
+        */
+        $('.panel-collapse').on('hidden.bs.collapse', function (e) {
+            var $target_id = e.currentTarget.id;
+            $("button#"+$target_id+"_status").attr('class', 'btn btn-default');
+            $("button#"+$target_id+"_status").text("Checking...");
+        })
+
+      });
+      
+      
+    </script>
 </head>
 <body>
 
@@ -37,7 +82,12 @@
             </div>
             <div id="srv" class="panel-collapse collapse">
                 <div class="panel-body">
-                    <p >00:27:0e:30:28:19</p>
+                    <div class="btn-group" role="group" aria-label="...">
+                      <button disabled="disabled" id="srv_status" class="btn btn-default">Checking...</button>
+                      <button id="srv_power" type="button" class="btn btn-default">
+                        <span class="glyphicon glyphicon-off" aria-hidden="true"></span> Turn On
+                      </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -50,7 +100,12 @@
             </div>
             <div id="xps" class="panel-collapse collapse">
                 <div class="panel-body">
-                    <p >00:27:0e:1f:32:21</p>
+                    <div class="btn-group" role="group" aria-label="...">
+                      <button disabled="disabled"  id="xps_status" type="button" class="btn btn-default">Checking...</button>
+                      <button id="xps_power" type="button" class="btn btn-default">
+                        <span class="glyphicon glyphicon-off" aria-hidden="true"></span> Turn On
+                      </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -63,7 +118,12 @@
             </div>
             <div id="mediapc" class="panel-collapse collapse">
                 <div class="panel-body">
-                    <p >00:27:0e:31:2b:13</p>
+                    <div class="btn-group" role="group" aria-label="...">
+                      <button disabled="disabled"  id="mediapc_status" type="button" class="btn btn-default">Checking...</button>
+                      <button id="mediapc_power" type="button" class="btn btn-default">
+                        <span class="glyphicon glyphicon-off" aria-hidden="true"></span> Turn On
+                      </button>
+                    </div>
                 </div>
             </div>
         </div>
