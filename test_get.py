@@ -25,9 +25,9 @@ class WolMgr(object):
 class WolWebService(object):
     exposed = True
 
-    @cherrypy.tools.json_out()
-    def GET(self):
-        return wol_hosts
+#    @cherrypy.tools.json_out()
+#    def GET(self):
+#        return wol_hosts
         
     def _cp_dispatch(self, vpath):
         if len(vpath) == 1:
@@ -36,6 +36,9 @@ class WolWebService(object):
 
     @cherrypy.tools.json_out()
     def GET(self, host):
+        if host == "_all":
+            return wol_hosts
+            
         ret = { "status" : "NA" }
         
         wh = get_wol_host(host)                
