@@ -18,13 +18,61 @@
     <link href="jumbotron-narrow.css" rel="stylesheet">
 
     <script type="text/javascript">
-      $(document).ready(function() {
+
+
+    $(document).ready(function() {
+    //get a reference to the collabsible menu
+    $panels = $('#accordion');
+
+
+    //request the JSON data and parse into the select element
+    $.ajax({
+      url: 'http://127.0.0.1:8080/wol/_all',
+      dataType:'JSON',
+      crossDomain: true,
+      success:function(data){
+        //clear the current content of the select
+        $panels.html('');
+        //iterate over the data and append a select option
+        var paneltags = ''
+        $.each(data, function(key,val){
+          var $host = val.name
+          var $mac = val.mac
+          paneltags += '\
+            <div class="panel panel-default">\
+                <div class="panel-heading">\
+                    <h4 class="panel-title">\
+                        <a data-toggle="collapse" data-parent="#accordion" href="#'+ $host +'">'+ $host +'</a>\
+                    </h4>\
+                </div>\
+                <div id="'+ $host +'" class="panel-collapse collapse">\
+                    <div class="panel-body">\
+                        <div class="btn-group" role="group" aria-label="...">\
+                          <button disabled="disabled" id="'+ $host +'_status" class="btn btn-default">Checking...</button>\
+                          <button id="'+ $host +'_power" type="button" class="btn btn-default">\
+                            <span class="glyphicon glyphicon-off" aria-hidden="true"></span> Turn On\
+                          </button>\
+                        </div>\
+                    </div>\
+                </div>\
+            </div>';
+          
+          
+        })
+        $panels.html(paneltags)
+      },
+      error:function(){
+        //if there is an error append a 'none available' option
+        $panels.html('<error id="-1">none available</error>');
+      }
+    });
+
 
 
         /*
         When a panel is open, check host status and accordingly change status
         */
-        $('.panel-collapse').on('show.bs.collapse', function (e) {
+        $panels.on('show.bs.collapse', '.panel-collapse', function (e) {
             var $target_id = e.currentTarget.id;
             $.getJSON("http://localhost:8080/wol/" + $target_id, function(data) {
                 var $status_level = "default";
@@ -44,57 +92,15 @@
         /*
         When a panel is closed, reset interface to default, ready for next open and check
         */
-        $('.panel-collapse').on('hidden.bs.collapse', function (e) {
+        $panels.on('hidden.bs.collapse', '.panel-collapse', function (e) {
             var $target_id = e.currentTarget.id;
             $("button#"+$target_id+"_status").attr('class', 'btn btn-default');
             $("button#"+$target_id+"_status").text("Checking...");
         })
-
-
-
-        //get a reference to the select element
-        $panels = $('#accordion');
-        //request the JSON data and parse into the select element
-        $.ajax({
-          url: 'http://127.0.0.1:8080/wol/_all',
-          dataType:'JSON',
-          crossDomain: true,
-          success:function(data){
-            //clear the current content of the select
-            $panels.html('');
-            //iterate over the data and append a select option
-            $.each(data, function(key, val){
-              var $host = val.name
-              var $mac = val.mac
-              $panels.append('\
-                <div class="panel panel-default">\
-                    <div class="panel-heading">\
-                        <h4 class="panel-title">\
-                            <a data-toggle="collapse" data-parent="#accordion" href="#'+ $host +'">'+ $host +'</a>\
-                        </h4>\
-                    </div>\
-                    <div id="'+ $host +'" class="panel-collapse collapse">\
-                        <div class="panel-body">\
-                            <div class="btn-group" role="group" aria-label="...">\
-                              <button disabled="disabled" id="'+ $host +'_status" class="btn btn-default">Checking...</button>\
-                              <button id="'+ $host +'_power" type="button" class="btn btn-default">\
-                                <span class="glyphicon glyphicon-off" aria-hidden="true"></span> Turn On\
-                              </button>\
-                            </div>\
-                        </div>\
-                    </div>\
-                </div>');
-              
-              
-            })
-          },
-          error:function(){
-            //if there is an error append a 'none available' option
-            $panels.html('<error id="-1">none available</error>');
-          }
-        });
         
-      });
+        
+                
+    });
 
     </script>
 </head>
