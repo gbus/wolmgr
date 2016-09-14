@@ -20,6 +20,8 @@
     <script type="text/javascript">
       $(document).ready(function() {
 
+        var webserver_address = location.host;
+
         $("#srv_power").click(function(e) {
           $.post("http://localhost:8080/wol/srv/TurnOn", {"length": $("input[name='length']").val()})
            .done(function(string) {
@@ -58,6 +60,26 @@
             $("button#"+$target_id+"_status").attr('class', 'btn btn-default');
             $("button#"+$target_id+"_status").text("Checking...");
         })
+        
+        function generate_panel(h,s){
+            return " \
+            <button disabled=\"disabled\"  id=\""+h+"_status\" type=\"button\" class=\"btn btn-"+s+"\">Checking...</button> \
+                <button id=\""+h+"_power\" type=\"button\" class=\"btn btn-default\"> \
+                <span class=\"glyphicon glyphicon-off\" aria-hidden=\"true\"></span> Turn On \
+                </button> \
+            ";
+        }
+
+        function show_panel_default (host) {
+//            var check_status_url = 'http://' + webserver_address + ':8080/wol/' + host
+            $('#content-pane-'+host).html(generate_panel(host,"default"));
+        }
+        
+        $.getJSON('http://' + webserver_address + ':8080/wol', function(data) {
+            $.each(json, function(index, obj) { // Iterates through a collection
+                $("#sel_host").append( $("<sel_host>").text(obj.name).attr("value", obj.mac))
+                });
+        });
 
       });
       
@@ -119,10 +141,7 @@
             <div id="mediapc" class="panel-collapse collapse">
                 <div class="panel-body">
                     <div class="btn-group" role="group" aria-label="...">
-                      <button disabled="disabled"  id="mediapc_status" type="button" class="btn btn-default">Checking...</button>
-                      <button id="mediapc_power" type="button" class="btn btn-default">
-                        <span class="glyphicon glyphicon-off" aria-hidden="true"></span> Turn On
-                      </button>
+                        <div id="content-pane-mediapc"></div>
                     </div>
                 </div>
             </div>
