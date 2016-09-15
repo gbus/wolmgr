@@ -103,7 +103,11 @@ if __name__ == '__main__':
             'tools.response_headers.on': True,
             'tools.response_headers.headers': [('Content-Type', 'text/plain')],
             'tools.CORS.on': True,
-        },     
+        },   
+        '/static': {
+            'tools.staticdir.on': True,
+            'tools.staticdir.dir': './public'
+        },  
     }
     cherrypy.tools.CORS = cherrypy.Tool('before_handler', CORS)
     webapp = WolMgr()
