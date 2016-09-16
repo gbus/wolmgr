@@ -1,57 +1,151 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-	<head>
-		<meta http-equiv="Content-type" content="text/html; charset=utf-8">
-		<title>Select test</title>
-		<script type="text/javascript" src="http://code.jquery.com/jquery.min.js"></script>
-		<script type="text/javascript" charset="utf-8">
-/*$.post("localhost:8080/api",
-  function(wol_hosts) {
-    var sel = $("#select");
-    sel.empty();
-    for (var i=0; i<wol_hosts.length; i++) {
-      sel.append('<option value="' + wol_hosts[i].name + '">' + wol_hosts[i].mac + '</option>');
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wol Manager</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<link rel="stylesheet" href="http://localhost:8080/static/css/style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<style type="text/css">
+    .bs-example{
+    	margin: 20px;
     }
-  }, "json");*/
-$(document).ready(function () {
-    $.getJSON("localhost:8080/api", function(data) {
-    /*
-        $('#sel_host').empty(); // Remove all <option> child tags.
-        $('#sel_host').append($('<option>').text("Select"));
+</style>
 
-        $.each(json, function(index, obj) { // Iterates through a collection
-            $("#sel_host").append( $("<sel_host>").text(obj.name).attr("value", obj.mac))
-            });
-        });
-        */
-        var items = data.items.map(function (item) {
-        return item.name + ': ' + item.mac;
-        
-        
-      showData.empty();
 
-      if (items.length) {
-        var content = '<li>' + items.join('</li><li>') + '</li>';
-        var list = $('<ul />').html(content);
-        showData.append(list);
+    <script type="text/javascript">
+
+
+    $(document).ready(function() {
+    //get a reference to the collapsible menu
+    $panels = $('#accordion');
+
+
+    //request the JSON data and parse into the select element
+    $.ajax({
+      url: 'http://127.0.0.1:8080/wol/_all',
+      dataType:'JSON',
+      crossDomain: true,
+      success:function(data){
+        //clear the current content of the select
+        $panels.html('');
+        //iterate over the data and append a select option
+        var paneltags = ''
+        $.each(data, function(key,val){
+          var $host = val.name
+          var $mac = val.mac
+          paneltags += '\
+            <div class="panel panel-default">\
+                <div class="panel-heading">\
+                    <h4 class="panel-title">\
+                        <a data-toggle="collapse" data-parent="#accordion" href="#'+ $host +'">'+ $host +'</a>\
+                    </h4>\
+                </div>\
+                <div id="'+ $host +'" class="panel-collapse collapse">\
+                    <div class="panel-body">\
+                        <div class="btn-group" role="group" aria-label="...">\
+                          <button disabled="disabled" id="'+ $host +'_status" class="btn btn-default">\
+                            <div class="spinner"></div>\
+                            </button>\
+                          <button id="'+ $host +'_power" type="button" class="btn btn-default">\
+                            <span class="glyphicon glyphicon-off" aria-hidden="true"></span> Wait...\
+                          </button>\
+                        </div>\
+                    </div>\
+                </div>\
+            </div>';
+          
+          
+        })
+        $panels.html(paneltags)
+      },
+      error:function(){
+        //if there is an error append a 'none available' option
+        $panels.html('<error id="-1">none available</error>');
       }
-      
-      showData.text('Loading the JSON file.');
+    });
 
-      });
 
+
+        /*
+        When a panel is open, check host status and accordingly change status
+        */
+        $panels.on('show.bs.collapse', '.panel-collapse', function (e) {
+            var $target_id = e.currentTarget.id;
+            $.getJSON("http://localhost:8080/wol/" + $target_id, function(data) {
+                var $status_level = "default";
+                var $button_label = "Wait...";
+                if (data['status'] == "On") {
+                    $status_level = "success";
+                    $button_label = "Turn Off";
+                } else if (data['status'] == "Off") {
+                    $status_level = "warning";
+                    $button_label = "Turn On";
+                } else {
+                    $status_level = "danger";
+                }
+                $("button#"+$target_id+"_status").attr('class', 'btn btn-'+$status_level);
+                $("button#"+$target_id+"_status").text(data['status']);
+                $('#'+$target_id+"_power").html('<span class="glyphicon glyphicon-off" aria-hidden="true"></span> ' + $button_label);
+            })
+        })
+        
+        
+        /*
+        When a panel is closed, reset interface to default, ready for next open and check
+        */
+        $panels.on('hidden.bs.collapse', '.panel-collapse', function (e) {
+            var $target_id = e.currentTarget.id;
+            $("button#"+$target_id+"_status").attr('class', 'btn btn-default');
+            $("button#"+$target_id+"_status").html("<div class=\"spinner\"></div>");
+            $('#'+$target_id+"_power").html('<span class="glyphicon glyphicon-off" aria-hidden="true"></span> Wait...');
+        })
+
+/*
+Button example        
+$("button").click(function(){
+    $.post("demo_test_post.asp",
+    {
+        name: "Donald Duck",
+        city: "Duckburg"
+    },
+    function(data, status){
+        alert("Data: " + data + "\nStatus: " + status);
     });
 });
-		</script>
-	</head>
-	<body>
-	
-    <div id="show-data"></div>
-		<select id="sel_host">
+*/
+                
+    });
 
-		</select>
+    </script>
+</head>
+<body>
 
-	</body>
-</html>
 
+    <div class="container">
+      <div class="jumbotron">
+        <h2>Remote power management</h2>
+
+
+        <div class="bs-example">
+            <div class="panel-group" id="accordion">
+                
+            </div>
+        </div>
+
+
+        <footer class="footer">
+            <p></p>
+        </footer>
+
+
+      </div> <!-- /jumbotron -->
+    </div> <!-- /container -->
+
+</body>
+</html> 
