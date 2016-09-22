@@ -7,19 +7,19 @@
 
 wol_hosts = [
     {
-      "name": "srv", 
+      "name": "nas", 
       "mac": "18:03:73:b0:39:f5",
       "ip": "192.168.0.254",
       "mgt_type": "freenas_api",
     },
     {
-      "name": "xps",
+      "name": "desktop",
       "mac": "00:27:0e:1f:32:21",
       "ip": "192.168.0.36",
       "mgt_type": "ssh_sudo"
     },
     {
-      "name": "mediapc",
+      "name": "tvmedia",
       "mac": "84:2b:2b:b1:71:b6",
       "ip": "192.168.0.72",
       "mgt_type": "ssh_sudo"

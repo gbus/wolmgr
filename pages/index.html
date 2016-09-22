@@ -25,7 +25,7 @@
 
     <div class="container">
       <div class="jumbotron">
-        <h2>Remote power management</h2>
+        <h3 class="text-center">Remote power management</h3>
 
 
         <div class="bs-example">
@@ -36,7 +36,6 @@
 
 
         <footer class="footer">
-            <p></p>
         </footer>
 
 
@@ -46,21 +45,30 @@
 
     <script type="text/javascript">
 
+    var host_request_status = {}
 
-//    $(document).ready(function() {
-    //get a reference to the collapsible menu
-    $panels = $('#accordion');
+
 
 
     //request the JSON data and parse into the select element
+    //get a reference to the collapsible menu
+    $panels = $('#accordion');
+    
     $.ajax({
       url: 'http://127.0.0.1:8080/wol/_all',
       dataType:'JSON',
       crossDomain: true,
       success:function(data){
-        //clear the current content of the select
+      
+        // INIT REQUEST STATUS FOR EACH HOST
+        $.each(data, function(key,val){
+            var $host = val.name  
+            host_request_status[$host] = "No"
+        });
+        
+        //CREATE PANELS
+        //clear the current content of the collapsible
         $panels.html('');
-        //iterate over the data and append a select option
         var paneltags = ''
         $.each(data, function(key,val){
           var $host = val.name
@@ -84,19 +92,28 @@
                         </div>\
                     </div>\
                 </div>\
-            </div>';
-          
-        $("button#"+$host+"_power").click(function(){
-            //Get the button value, which is assumed to return the action name as i nthe rest url
-            var $action = $(this).val()
-            $.post("http://127.0.0.1:8080/wol/"+ $host +"/" + $action, {},
-            function(data, status){
-                alert("Data: " + data + "\nStatus: " + status);
+            </div>';          
+        });
+        $panels.html(paneltags);
+        
+        // ASSOCIATE AJAX CALLS TO ON/OFF BUTTONS
+        $.each(data, function(key,val){
+            var $host = val.name          
+            $("button#"+$host+"_power").click(function(){
+                //Get the button value, which is assumed to return the action name as in the rest url
+                var $action = $(this).val()
+                $.post("http://127.0.0.1:8080/wol/"+ $host +"/" + $action, {},
+                function(data, status){
+                  var alert_type = "warning"
+                  if (status == "success") {
+                    alert_type = "success"  
+                    host_request_status[$host] = $action
+                  }
+                  $("<div class=\"alert alert-"+alert_type+"\" role=\"alert\"/>").html(status+": sent the action '"+$action+"' to "+$host).appendTo("footer.footer")
+                });
             });
         });
-          
-        })
-        $panels.html(paneltags)
+        
       },
       error:function(){
         //if there is an error append a 'none available' option
@@ -147,21 +164,20 @@
             $('#'+$target_id+"_power").html('<span class="glyphicon glyphicon-off" aria-hidden="true"></span> Wait...');
         })
 
-/*
-Button example        
-$("button").click(function(){
-    $.post("demo_test_post.asp",
-    {
-        name: "Donald Duck",
-        city: "Duckburg"
-    },
-    function(data, status){
-        alert("Data: " + data + "\nStatus: " + status);
-    });
-});
-*/
-                
-//    });
+
+
+window.setInterval(function(){
+  /// call your function here
+    $.each(host_request_status, function(host,request){
+        if (request!='No') {
+        
+            alert(host+" got a request: "+request+"Current: "+$("panels button#"+host+"_status").val())
+            host_request_status[host] = "No"
+        }
+    })
+}, 30000);
+
+
 
     </script>
 </body>
