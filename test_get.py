@@ -92,6 +92,8 @@ class WolWebService(object):
 #         cherrypy.session.pop('mystring', None)
 
 if __name__ == '__main__':
+    cherrypy.config.update(cherrypy_globals)
+    
     conf = {
         '/': {
             'tools.sessions.on': True,

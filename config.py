@@ -5,6 +5,11 @@
 #    "mediapc"   : "00:27:0e:31:2b:13",
 #}
 
+cherrypy_globals = {
+    'server.socket_host': '0.0.0.0',
+    'server.socket_port': 8080,
+}
+
 wol_hosts = [
     {
       "name": "nas", 

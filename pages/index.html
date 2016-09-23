@@ -45,7 +45,9 @@
 
     <script type="text/javascript">
 
-    var host_request_status = {}
+    var webserver_address = location.host;
+    var wol_url = "http://" + webserver_address + "/wol";
+    var host_request_status = {};
 
 
 
@@ -54,8 +56,30 @@
     //get a reference to the collapsible menu
     $panels = $('#accordion');
     
+    function set_button_status(host,status) {
+                var $status_level = "default";
+                var $button_label = "Wait...";
+                var $button_value = "NA"
+                if (status == "On") {
+                    $status_level = "success";
+                    $button_label = "Turn Off";
+                    $button_value = "TurnOff"
+                } else if (status == "Off") {
+                    $status_level = "warning";
+                    $button_label = "Turn On";
+                    $button_value = "TurnOn"
+                } else {
+                    $status_level = "danger";
+                }
+                $("button#"+host+"_status").attr('class', 'btn btn-'+$status_level);
+                $("button#"+host+"_status").text(status);
+                $("button#"+host+"_power").attr('value', $button_value);
+                $("button#"+host+"_power").removeAttr("disabled");
+                $('#'+host+"_power").html('<span class="glyphicon glyphicon-off" aria-hidden="true"></span> ' + $button_label);
+    }            
+                 
     $.ajax({
-      url: 'http://127.0.0.1:8080/wol/_all',
+      url: wol_url+'/_all',
       dataType:'JSON',
       crossDomain: true,
       success:function(data){
@@ -102,7 +126,7 @@
             $("button#"+$host+"_power").click(function(){
                 //Get the button value, which is assumed to return the action name as in the rest url
                 var $action = $(this).val()
-                $.post("http://127.0.0.1:8080/wol/"+ $host +"/" + $action, {},
+                $.post(wol_url+"/"+ $host +"/" + $action, {},
                 function(data, status){
                   var alert_type = "warning"
                   if (status == "success") {
@@ -124,30 +148,12 @@
 
 
         /*
-        When a panel is open, check host status and accordingly change status
+        When a panel is open, check host status and change status accordingly
         */
         $panels.on('show.bs.collapse', '.panel-collapse', function (e) {
-            var $target_id = e.currentTarget.id;
-            $.getJSON("http://localhost:8080/wol/" + $target_id, function(data) {
-                var $status_level = "default";
-                var $button_label = "Wait...";
-                var $button_value = "NA"
-                if (data['status'] == "On") {
-                    $status_level = "success";
-                    $button_label = "Turn Off";
-                    $button_value = "TurnOff"
-                } else if (data['status'] == "Off") {
-                    $status_level = "warning";
-                    $button_label = "Turn On";
-                    $button_value = "TurnOn"
-                } else {
-                    $status_level = "danger";
-                }
-                $("button#"+$target_id+"_status").attr('class', 'btn btn-'+$status_level);
-                $("button#"+$target_id+"_status").text(data['status']);
-                $("button#"+$target_id+"_power").attr('value', $button_value);
-                $("button#"+$target_id+"_power").removeAttr("disabled");
-                $('#'+$target_id+"_power").html('<span class="glyphicon glyphicon-off" aria-hidden="true"></span> ' + $button_label);
+            var host = e.currentTarget.id;
+            $.getJSON(wol_url +'/'+ host, function(data) {
+                set_button_status(host, data['status']);
             })
         })
         
@@ -170,12 +176,25 @@ window.setInterval(function(){
   /// call your function here
     $.each(host_request_status, function(host,request){
         if (request!='No') {
-        
-            alert(host+" got a request: "+request+"Current: "+$("panels button#"+host+"_status").val())
-            host_request_status[host] = "No"
+            $.getJSON( wol_url + "/" + host, function(data) {
+                current_status = data['status'];        
+            
+                // var display_curr = $panels.find("button#"+host+"_status").text()
+                if (request=='TurnOff' && current_status=='Off') {          
+                    set_button_status(host,'Off');
+                    host_request_status[host] = "No";
+                }
+                if  (request=='TurnOn' && current_status=='On') {          
+                    set_button_status(host,'On');
+                    host_request_status[host] = "No";
+                }
+            })
+            
+//            alert(host+" got a request: "+request+"Current: "+display_curr)
+            
         }
     })
-}, 30000);
+}, 10000);
 
 
 
