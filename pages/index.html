@@ -134,7 +134,7 @@
                     alert_type = "success"  
                     host_request_status[$host] = $action
                   }
-		  $('#'+$host+"_info").html(status+": sent the action '"+$action+"' to "+$host);
+		  $('#'+$host+"_info").html("<div class=\"alert alert-"+alert_type+"\" role=\"alert\">"+status+": sent the action '"+$action+"' to "+$host+"</div>");
 //                 $("<div class=\"alert alert-"+alert_type+"\" role=\"alert\"/>").html(status+": sent the action '"+$action+"' to "+$host).appendTo("footer.footer")
                 });
             });
