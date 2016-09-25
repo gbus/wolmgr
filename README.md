@@ -2,6 +2,7 @@
 
 Wolmgr is a web application for managing power on/off of hosts on the local network.
 It is based on Cherrypy to provide a restfull interface to send wol, ping or shutdown commands.
+The commands are run by the fabric library. 
 
 Power On:
 
@@ -39,7 +40,7 @@ git clone https://github.com/gbus/wolmgr.git
 
 Configuration:
 
-Edit config.py to set the details of the hosts to control (name, IP, MAC, type) 
-Set the account info for the shutdown plugins in redentials.py
+Edit config.py to set the details of the hosts to control (name, IP, MAC, type).
+Set the account info for the shutdown plugins in credentials.py.
 
 The package is meant to be run in a linux environment, ideally on a credit card size board, like raspberry pi to keep the power consumption to a minuimum for a system supposed to be permanently on.
