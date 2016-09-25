@@ -201,7 +201,7 @@ window.setInterval(function(){
 // Set 2 secs timeout to close the alerts
 window.setTimeout(function() {
     $.each(host_request_status, function(host,request){
-        $('#'+host+'_info .alert').alert('close');
+        $('#'+host+'_info.alert').alert('close');
     });
 }, 2000);
 
