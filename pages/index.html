@@ -115,6 +115,7 @@
                           </button>\
                         </div>\
                     </div>\
+		    <div id="'+$host+'_info"></div>\
                 </div>\
             </div>';          
         });
@@ -133,7 +134,8 @@
                     alert_type = "success"  
                     host_request_status[$host] = $action
                   }
-                  $("<div class=\"alert alert-"+alert_type+"\" role=\"alert\"/>").html(status+": sent the action '"+$action+"' to "+$host).appendTo("footer.footer")
+		  $('#'+$host+"_info").html(status+": sent the action '"+$action+"' to "+$host);
+//                 $("<div class=\"alert alert-"+alert_type+"\" role=\"alert\"/>").html(status+": sent the action '"+$action+"' to "+$host).appendTo("footer.footer")
                 });
             });
         });
