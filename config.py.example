@@ -1,0 +1,40 @@
+# Customize the list below with your host info
+wol_hosts = [
+    # host1
+    {
+      "name": "myhost1", 
+      "mac": "18:03:73:b0:39:f5",
+      "ip": "192.168.0.31",
+      "mgt_type": "freenas_api",
+    },
+
+    # host 2
+    {
+      "name": "myhost2",
+      "mac": "00:22:19:2c:28:2f",
+      "ip": "192.168.0.11",
+      "mgt_type": "ssh_sudo"
+    },
+
+    # ...
+    # host n
+    #...
+]
+
+
+
+cherrypy_globals = {
+    'server.socket_host': '0.0.0.0',
+    'server.socket_port': 8080,
+}
+
+
+
+def get_wol_host(host):
+    for wh in wol_hosts:
+        if wh['name'] == host:
+            break
+    return wh
+    
+    
+    
