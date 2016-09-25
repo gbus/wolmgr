@@ -134,7 +134,7 @@
                     alert_type = "success"  
                     host_request_status[$host] = $action
                   }
-		  $('#'+$host+"_info").html("<p><div class=\"alert alert-"+alert_type+"\" role=\"alert\"><strong>"+status+"</strong>: Action '"+$action+"' sent to '"+$host+"'</div></p>");
+		  $('#'+$host+'_info').html("<p><div class=\"alert alert-"+alert_type+"\" role=\"alert\"><strong>"+status+"</strong>: Action '"+$action+"' sent to '"+$host+"'</div></p>");
 //                 $("<div class=\"alert alert-"+alert_type+"\" role=\"alert\"/>").html(status+": sent the action '"+$action+"' to "+$host).appendTo("footer.footer")
                 });
             });
@@ -175,7 +175,6 @@
 
 
 window.setInterval(function(){
-  /// call your function here
     $.each(host_request_status, function(host,request){
         if (request!='No') {
             $.getJSON( wol_url + "/" + host, function(data) {
@@ -198,6 +197,13 @@ window.setInterval(function(){
     })
 }, 10000);
 
+
+// Set 2 secs timeout to close the alerts
+window.setTimeout(function() {
+    $.each(host_request_status, function(host,request){
+        $('#'+host+'_info .alert').alert('close');
+    });
+}, 2000);
 
 
     </script>
