@@ -13,14 +13,8 @@ wol_hosts = [
     },
     {
       "name": "desktop",
-      "mac": "00:27:0e:1f:32:21",
-      "ip": "192.168.0.36",
-      "mgt_type": "ssh_sudo"
-    },
-    {
-      "name": "tvmedia",
-      "mac": "84:2b:2b:b1:71:b6",
-      "ip": "192.168.0.72",
+      "mac": "00:22:19:2c:28:2f",
+      "ip": "192.168.0.11",
       "mgt_type": "ssh_sudo"
     },
 ]
