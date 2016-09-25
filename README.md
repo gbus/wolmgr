@@ -43,7 +43,7 @@ on a raspberry pi create a link to the wol command:
 
 Configuration:
 
-Edit config.py to set the details of the hosts to control (name, IP, MAC, type).
+Rename config.py.example in config.py and edit it as per example (name, IP, MAC, type).
 Set the account info for the shutdown plugins in credentials.py.
 
 Security:
