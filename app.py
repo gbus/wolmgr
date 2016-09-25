@@ -109,14 +109,11 @@ if __name__ == '__main__':
         '/static': {
             'tools.staticdir.on': True,
             'tools.staticdir.dir': './public'
-        },  
-        {
-            '/favicon.ico':
-            {
-                'tools.staticfile.on': True,
-                'tools.staticfile.filename': './favicon.png'
-            }
-        }
+        },
+        '/favicon.ico': {
+            'tools.staticfile.on': True,
+            'tools.staticfile.filename': './favicon.png'
+        },
     }
     cherrypy.tools.CORS = cherrypy.Tool('before_handler', CORS)
     webapp = WolMgr()
