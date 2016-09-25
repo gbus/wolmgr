@@ -15,6 +15,21 @@
     .bs-example{
     	margin: 20px;
     }
+    body {
+        background:#c33;
+    }
+
+    .panel-transparent {
+        background: none;
+    }
+
+    .panel-transparent .panel-heading{
+        background: rgba(122, 130, 136, 0.2)!important;
+    }
+
+    .panel-transparent .panel-body{
+        background: rgba(46, 51, 56, 0.2)!important;
+    }
 </style>
 
 
@@ -98,7 +113,7 @@
           var $host = val.name
           var $mac = val.mac
           paneltags += '\
-            <div class="panel panel-default">\
+            <div class="panel panel-default panel-transparent">\
                 <div class="panel-heading">\
                     <h4 class="panel-title">\
                         <a data-toggle="collapse" data-parent="#accordion" href="#'+ $host +'">'+ $host +'</a>\
