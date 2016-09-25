@@ -32,15 +32,22 @@ Installation pre-requisite:
 
 cherrypy
 fabric
+wakeonline tools
 
 Installation:
 
 git clone https://github.com/gbus/wolmgr.git
 
+on a raspberry pi create a link to the wol command:
+ sudo ln /usr/bin/wakeonlan /bin/wol
 
 Configuration:
 
 Edit config.py to set the details of the hosts to control (name, IP, MAC, type).
 Set the account info for the shutdown plugins in credentials.py.
 
-The package is meant to be run in a linux environment, ideally on a credit card size board, like raspberry pi to keep the power consumption to a minuimum for a system supposed to be permanently on.
+Security:
+
+The app doesn't currently offer any access protection. I have set up a vpn to limit the access  to the service from remote. In fututre a login mechanism will be implemented. 
+
+The package is meant to be run in a linux environment, ideally on a credit card size board, (like raspberry pi) to keep the power consumption to a minuimum for a system supposed to be permanently on.
