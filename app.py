@@ -112,7 +112,7 @@ if __name__ == '__main__':
         },
         '/favicon.ico': {
             'tools.staticfile.on': True,
-            'tools.staticfile.filename': './favicon.png'
+            'tools.staticfile.filename': './favicon.ico'
         },
     }
     cherrypy.tools.CORS = cherrypy.Tool('before_handler', CORS)
