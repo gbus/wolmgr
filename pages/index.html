@@ -87,7 +87,7 @@
                 } else {
                     $status_level = "danger";
                 }
-                $("button#"+host+"_status").attr('class', 'btn btn-'+$status_level+'button_size');
+                $("button#"+host+"_status").attr('class', 'btn btn-'+$status_level+' button_size');
                 $("button#"+host+"_status").text(status);
                 $("button#"+host+"_power").attr('value', $button_value);
                 $("button#"+host+"_power").removeAttr("disabled");
