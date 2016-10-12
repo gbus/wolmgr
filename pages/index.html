@@ -223,7 +223,8 @@ setInterval(blinker, 2000);
 
 window.setInterval(function(){
     $.each(host_request_status, function(host,request){
-        $("span#"+host+"_blink").addClass('blink_me');
+        //$("span#"+host+"_blink").addClass('blink_me');
+        document.getElementById(host+"_blink").className = "blink_me";
         if (request!='No') {
             $.getJSON( wol_url + "/" + host, function(data) {
                 current_status = data['status'];        
