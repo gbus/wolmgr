@@ -4,12 +4,12 @@ Wolmgr is a web application for turning hosts on/off  from remote.
 It is based on Cherrypy to provide a restfull interface to send WOL, ping or shutdown commands.
 The commands are run by the fabric library (http://www.fabfile.org/). 
 
-<b>Power On:</b>
+<i>Power On:</i>
 
 A wake on lan command is run on the local network.
 
 
-<b>Power Off:</b>
+<i>Power Off:</i>
 
 For each type of host a plugin is called to handle the specific shutdown procedure:
 
@@ -23,31 +23,33 @@ Status check:
 A ping is run periodically to show when the machine completed the power up/down.
 
 
-Interface:
+<b>Interface:</b>
 
 The interface is a simple web page based on JS, Ajax, JQuery and bootstrap to call the web application through REST actions.
+
+
 ![wolmgr](https://cloud.githubusercontent.com/assets/4559307/19318209/acab2466-909f-11e6-9b4c-a4d4b2f6e512.png)
 
 
-Installation pre-requisite:
+<b>Installation pre-requisite:</b>
 
 cherrypy
 fabric
 wakeonline tools
 
-Installation:
+<b>Installation:</b>
 
 git clone https://github.com/gbus/wolmgr.git
 
 on a raspberry pi create a link to the wol command:
  sudo ln /usr/bin/wakeonlan /bin/wol
 
-Configuration:
+<b>Configuration:</b>
 
 Rename config.py.example in config.py and edit it as per example (name, IP, MAC, type).
 Set the account info for the shutdown plugins in credentials.py.
 
-Security:
+<b>Security:</b>
 
 The app doesn't currently offer any access protection. I have set up a vpn to limit the access  to the service from remote. In future user/password login will be implemented. 
 
