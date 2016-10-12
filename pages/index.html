@@ -224,8 +224,9 @@ setInterval(blinker, 1000);
 window.setInterval(function(){
     $.each(host_request_status, function(host,request){
         //$("span#"+host+"_blink").addClass('blink_me');
-        document.getElementById(host+"_blink").className = "blink_me";
+        document.getElementById(host+"_blink").addClass("blink_me");
         if (request!='No') {
+            
             $.getJSON( wol_url + "/" + host, function(data) {
                 current_status = data['status'];        
             
@@ -233,7 +234,7 @@ window.setInterval(function(){
                 if (request=='TurnOff' && current_status=='Off') {          
                     set_panel_status(host,'Off');
                     host_request_status[host] = "No";
-                    $("span#"+host+"_blink").removeClass('blink_me');
+                    document.getElementById(host+"_blink").className = "";
                 }
                 if  (request=='TurnOn' && current_status=='On') {          
                     set_panel_status(host,'On');
