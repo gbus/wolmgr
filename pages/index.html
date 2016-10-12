@@ -143,7 +143,7 @@
             <div class="panel panel-default panel-transparent">\
                 <div class="panel-heading">\
                     <h4 class="panel-title">\
-                        <blink><a data-toggle="collapse" data-parent="#accordion" href="#'+ $host +'">'+ $host +'</a></blink>\
+                        <span class="blink_me"><a data-toggle="collapse" data-parent="#accordion" href="#'+ $host +'">'+ $host +'</a></span>\
                     </h4>\
                 </div>\
                 <div id="'+ $host +'" class="panel-collapse collapse">\
@@ -215,7 +215,11 @@
         
     })
 
-
+function blinker() {
+    $('.blink_me').fadeOut(500);
+    $('.blink_me').fadeIn(500);
+}
+setInterval(blinker, 1000);
 
 window.setInterval(function(){
     $.each(host_request_status, function(host,request){
