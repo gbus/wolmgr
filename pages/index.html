@@ -78,11 +78,9 @@
                 var $button_value = "NA"
                 if (status == "On") {
                     $status_level = "success";
-                    //$button_label = "Turn Off";
                     $button_value = "TurnOff"
                 } else if (status == "Off") {
                     $status_level = "warning";
-                    //$button_label = "Turn On";
                     $button_value = "TurnOn"
                 } else {
                     $status_level = "danger";
@@ -91,7 +89,6 @@
                 $("button#"+host+"_status").text(status);
                 $("button#"+host+"_power").attr('value', $button_value);
                 $("button#"+host+"_power").removeAttr("disabled");
-                //$('#'+host+"_power").html('<span class="glyphicon glyphicon-off" aria-hidden="true"></span> ' + $button_label);
     }            
                  
     $.ajax({
@@ -187,7 +184,6 @@
             $("button#"+$target_id+"_status").html("<div class=\"spinner\"></div>");
             $("button#"+$target_id+"_power").attr('disabled', 'disabled');
             
-            //$('#'+$target_id+"_power").html('<span class="glyphicon glyphicon-off" aria-hidden="true"></span>');
         })
 
 
