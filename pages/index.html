@@ -54,6 +54,24 @@
         <footer class="footer">
         </footer>
 
+        <!-- Confirm ON/OFF modal -->
+        <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModalLabel">
+          <div class="modal-dialog modal-sm" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="confirmModalLabel">New message</h4>
+              </div>
+              <div class="modal-body">
+                <div id="confirmModalMsg"></div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button id="host_power" type="button" class="btn btn-primary">Ok</button>
+              </div> <!--End footer-->
+            </div> <!--End modal content-->
+          </div> <!--End modal dialog-->
+        </div> <!--End modal-->
 
       </div> <!-- /jumbotron -->
     </div> <!-- /container -->
@@ -67,28 +85,27 @@
 
 
 
-
     //request the JSON data and parse into the select element
     //get a reference to the collapsible menu
     $panels = $('#accordion');
     
-    function set_button_status(host,status) {
+    function set_panel_status(host,status) {
                 var $status_level = "default";
                 var $button_label = "Wait...";
                 var $button_value = "NA"
                 if (status == "On") {
                     $status_level = "success";
-                    $button_value = "TurnOff"
+                    $button_action = "TurnOff"
                 } else if (status == "Off") {
                     $status_level = "warning";
-                    $button_value = "TurnOn"
+                    $button_action = "TurnOn"
                 } else {
                     $status_level = "danger";
                 }
                 $("button#"+host+"_status").attr('class', 'btn btn-'+$status_level+' button_size');
                 $("button#"+host+"_status").text(status);
-                $("button#"+host+"_power").attr('value', $button_value);
-                $("button#"+host+"_power").removeAttr("disabled");
+                $("button#"+host+"_confirm").attr('data-action', $button_action);
+                $("button#"+host+"_confirm").removeAttr("disabled");
     }            
                  
     $.ajax({
@@ -122,38 +139,24 @@
                         <div class="btn-group" role="group" aria-label="...">\
                           <button disabled="disabled" id="'+ $host +'_status" class="btn btn-default button_size">\
                             <div class="spinner"></div>\
-                            </button>\
-                          <button id="'+ $host +'_power" value="NA" type="button" class="btn btn-default button_size" disabled="disabled">\
-                            <span class="glyphicon glyphicon-off" aria-hidden="true"></span> \
                           </button>\
+                          <button id="'+ $host +'_confirm" value="NA" type="button" class="btn btn-default button_size" disabled="disabled" data-toggle="modal" data-target="#confirmModal" data-host="'+$host+' data-action="NA">\
+         				    <span class="glyphicon glyphicon-off" aria-hidden="true"></span> \
+			              </button>\
                         </div>\
-		      <div id="'+$host+'_info"></div>\
+		      \
                     </div>\
                 </div>\
             </div>';          
+  // To remove when modal power button deployed
+  //                        '<button id="'+ $host +'_power" value="NA" type="button" class="btn btn-default button_size" disabled="disabled">\
+  //                            <span class="glyphicon glyphicon-off" aria-hidden="true"></span> \
+  //                        </button>\'
+  //
+  //                <div id="'+$host+'_info"></div>\
+  
         });
         $panels.html(paneltags);
-        
-        // ASSOCIATE AJAX CALLS TO ON/OFF BUTTONS
-        $.each(data, function(key,val){
-            var $host = val.name          
-            $("button#"+$host+"_power").click(function(){
-                //Get the button value, which is assumed to return the action name as in the rest url
-                var $action = $(this).val()
-                $.post(wol_url+"/"+ $host +"/" + $action, {},
-                function(data, status){
-                  var alert_type = "warning"
-                  if (status == "success") {
-                    alert_type = "success"  
-                    host_request_status[$host] = $action
-                  }
-		  $('#'+$host+'_info').html("<p><div id=\""+$host+"_alert\" class=\"alert alert-"+alert_type+"\" role=\"alert\">\
-<a href=\"#\" class=\"close\" data-dismiss=\"alert\" aria-label=\"close\">&times;</a>\
-<strong>"+status+"</strong>: Action '"+$action+"' sent to '"+$host+"'</div></p>");
-
-                });
-            });
-        });
         
       },
       error:function(){
@@ -161,6 +164,26 @@
         $panels.html('<error id="-1">none available</error>');
       }
     });
+    
+    $('#confirmModal').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget) // Button that triggered the modal
+      var host = button.data('host') // Extract info from data-* attributes
+      var action = button.data('action')
+      // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+      // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+      var modal = $(this)
+      modal.find('.modal-title').text(host)
+      modal.find('.modal-body #confirmModalMsg').val('Do you want to send "'+action+'" to the host '+host+'?')
+
+      modal.find('.modal-footer #host_power').click(function(){
+        $.post(wol_url+"/"+ host +"/" + action, {},
+          function(data, status){
+            if (status == "success") {
+              host_request_status[$host] = $action
+            }
+        });
+      });
+    })
 
 
 
@@ -170,7 +193,7 @@
         $panels.on('show.bs.collapse', '.panel-collapse', function (e) {
             var host = e.currentTarget.id;
             $.getJSON(wol_url +'/'+ host, function(data) {
-                set_button_status(host, data['status']);
+                set_panel_status(host, data['status']);
             })
         })
         
@@ -196,11 +219,11 @@ window.setInterval(function(){
             
                 // var display_curr = $panels.find("button#"+host+"_status").text()
                 if (request=='TurnOff' && current_status=='Off') {          
-                    set_button_status(host,'Off');
+                    set_panel_status(host,'Off');
                     host_request_status[host] = "No";
                 }
                 if  (request=='TurnOn' && current_status=='On') {          
-                    set_button_status(host,'On');
+                    set_panel_status(host,'On');
                     host_request_status[host] = "No";
                 }
             })
