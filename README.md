@@ -26,7 +26,7 @@ A ping is run periodically to show when the machine completed the power up/down.
 Interface:
 
 The interface is a simple web page based on JS, Ajax, JQuery and bootstrap to call the web application through REST actions.
-
+![wolmgr](https://cloud.githubusercontent.com/assets/4559307/19318209/acab2466-909f-11e6-9b4c-a4d4b2f6e512.png)
 
 
 Installation pre-requisite:
