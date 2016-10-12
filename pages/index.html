@@ -224,6 +224,7 @@ setInterval(blinker, 2000);
 window.setInterval(function(){
     $.each(host_request_status, function(host,request){
         if (request!='No') {
+            $("span#"+host+"_blink").attr('class', 'blink_me');
             $.getJSON( wol_url + "/" + host, function(data) {
                 current_status = data['status'];        
             
@@ -231,10 +232,12 @@ window.setInterval(function(){
                 if (request=='TurnOff' && current_status=='Off') {          
                     set_panel_status(host,'Off');
                     host_request_status[host] = "No";
+                    $("span#"+host+"_blink").removeAttr("class");
                 }
                 if  (request=='TurnOn' && current_status=='On') {          
                     set_panel_status(host,'On');
                     host_request_status[host] = "No";
+                    $("span#"+host+"_blink").removeAttr("class");
                 }
             })
             
