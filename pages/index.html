@@ -185,7 +185,7 @@
         $.post(wol_url+"/"+ host +"/" + action, {},
           function(data, status){
             if (status == "success") {
-              host_request_status[host] = $action
+              host_request_status[host] = action
             }
         });
       });
