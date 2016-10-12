@@ -4,12 +4,12 @@ Wolmgr is a web application for turning hosts on/off  from remote.
 It is based on Cherrypy to provide a restfull interface to send WOL, ping or shutdown commands.
 The commands are run by the fabric library (http://www.fabfile.org/). 
 
-Power On:
+<b>Power On:</b>
 
 A wake on lan command is run on the local network.
 
 
-Power Off:
+<b>Power Off:</b>
 
 For each type of host a plugin is called to handle the specific shutdown procedure:
 
@@ -26,6 +26,8 @@ A ping is run periodically to show when the machine completed the power up/down.
 Interface:
 
 The interface is a simple web page based on JS, Ajax, JQuery and bootstrap to call the web application through REST actions.
+
+
 
 Installation pre-requisite:
 
