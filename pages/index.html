@@ -216,10 +216,10 @@
     })
 
 function blinker() {
-    $('.blink_me').fadeOut(500);
+    $('.blink_me').fadeOut(200);
     $('.blink_me').fadeIn(500);
 }
-setInterval(blinker, 1000);
+setInterval(blinker, 2000);
 
 window.setInterval(function(){
     $.each(host_request_status, function(host,request){
