@@ -24,8 +24,10 @@ wol_hosts = [
     #...
 ]
 
-run_dir = '%s/run/wolmgr.pid' % os.getcwd()
-log_dir = '%s/log' % os.getcwd()
+
+cur_dir = os.path.abspath(os.getcwd())
+run_file = '%s/run/wolmgr.pid' % cur_dir
+log_dir = '%s/log' % cur_dir
 
 log_conf = {'log.screen': False,
             'log.access_file': '%s/access.log' % log_dir,

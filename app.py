@@ -76,7 +76,7 @@ if __name__ == '__main__':
     conf = {
         '/': {
             'tools.sessions.on': True,
-            'tools.staticdir.root': os.path.abspath(os.getcwd()),
+            'tools.staticdir.root': cur_dir,
             'tools.CORS.on': True,
         },
         '/wol': {
@@ -87,11 +87,11 @@ if __name__ == '__main__':
         },   
         '/static': {
             'tools.staticdir.on': True,
-            'tools.staticdir.dir': '%s/public' % os.path.abspath(os.getcwd())
+            'tools.staticdir.dir': '%s/public' % cur_dir
         },
         '/favicon.ico': {
             'tools.staticfile.on': True,
-            'tools.staticfile.filename': './favicon.ico'
+            'tools.staticfile.filename': '%s/favicon.ico' % cur_dir
         },
     }
     cherrypy.tools.CORS = cherrypy.Tool('before_handler', CORS)
@@ -103,7 +103,7 @@ if __name__ == '__main__':
     d = Daemonizer(cherrypy.engine)
     d.subscribe()
     
-    PIDFile(cherrypy.engine, run_dir).subscribe()
+    PIDFile(cherrypy.engine, run_file).subscribe()
     
     cherrypy.engine.start()
     cherrypy.engine.block()
