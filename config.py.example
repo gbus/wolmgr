@@ -1,3 +1,6 @@
+import os
+
+
 # Customize the list below with your host info
 wol_hosts = [
     # host1
