@@ -19,7 +19,7 @@ def CORS():
 class WolMgr(object):
     @cherrypy.expose
     def index(self):
-        return open('pages/index.html')
+        return open('index.html')
         
         
 class WolWebService(object):
@@ -76,7 +76,7 @@ if __name__ == '__main__':
     conf = {
         '/': {
             'tools.sessions.on': True,
-            'tools.staticdir.root': cur_dir,
+            'tools.staticdir.root': '%s/pages' % cur_dir,
             'tools.CORS.on': True,
         },
         '/wol': {
