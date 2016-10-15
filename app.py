@@ -87,7 +87,7 @@ if __name__ == '__main__':
         },   
         '/static': {
             'tools.staticdir.on': True,
-            'tools.staticdir.dir': './public'
+            'tools.staticdir.dir': '%s/public' % os.path.abspath(os.getcwd())
         },
         '/favicon.ico': {
             'tools.staticfile.on': True,
