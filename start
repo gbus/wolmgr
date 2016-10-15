@@ -1,0 +1,19 @@
+#!/bin/bash
+
+PROG=app.py
+LOG_DIR=./log
+RUN_DIR=./run
+
+if [[ ! -d $LOG_DIR ]]
+then
+    mkdir $LOG_DIR
+fi
+
+if [[ ! -d $RUN_DIR ]]
+then
+    mkdir $RUN_DIR
+fi
+
+python $PROG
+
+exit 0

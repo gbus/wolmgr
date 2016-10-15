@@ -21,6 +21,12 @@ wol_hosts = [
     #...
 ]
 
+run_dir = '%s/run/wolmgr.pid' % os.getcwd()
+log_dir = '%s/log' % os.getcwd()
+
+log_conf = {'log.screen': False,
+            'log.access_file': '%s/access.log' % log_dir,
+            'log.error_file': '%s/log/error.log' % log_dir}
 
 
 cherrypy_globals = {
