@@ -19,7 +19,7 @@ def CORS():
 class WolMgr(object):
     @cherrypy.expose
     def index(self):
-        return open('pages/index.html')
+        return open(cur_dir + 'pages/index.html')
         
         
 class WolWebService(object):
