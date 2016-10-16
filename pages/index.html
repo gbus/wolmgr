@@ -179,7 +179,7 @@
       // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
       var modal = $(this)
       modal.find('.modal-title').text(host)
-      modal.find('.modal-body #confirmModalMsg').text('Do you want to send "'+action+'" to the host '+host+'?')
+      modal.find('.modal-body #confirmModalMsg').text('Do you want to send the command "'+action+'" to the host '+host+'?')
 
       modal.find('.modal-footer #host_power').click(function(){
         $.post(wol_url+"/"+ host +"/" + action, {},
@@ -211,19 +211,18 @@
         var $target_id = e.currentTarget.id;
         $("button#"+$target_id+"_status").attr('class', 'btn btn-default button_size');
         $("button#"+$target_id+"_status").html("<div class=\"spinner\"></div>");
-        $("button#"+$target_id+"_power").attr('disabled', 'disabled');
+        $("button#"+$target_id+"_confirm").attr('disabled', 'disabled');
         
     })
 
 function blinker() {
     $('.blink_me').fadeOut(200);
-    $('.blink_me').fadeIn(500);
+    $('.blink_me').fadeIn(400);
 }
 setInterval(blinker, 1000);
 
 window.setInterval(function(){
     $.each(host_request_status, function(host,request){
-        //$("span#"+host+"_blink").addClass('blink_me');
         if (request!='No') {
         document.getElementById(host+"_blink").className = "blink_me";
             
@@ -243,7 +242,6 @@ window.setInterval(function(){
                 }
             })
             
-//            alert(host+" got a request: "+request+"Current: "+display_curr)
             
         }
     })
