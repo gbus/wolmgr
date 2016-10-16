@@ -230,13 +230,8 @@ window.setInterval(function(){
                 current_status = data['status'];        
             
                 // var display_curr = $panels.find("button#"+host+"_status").text()
-                if (request=='TurnOff' && current_status=='Off') {          
-                    set_panel_status(host,'Off');
-                    host_request_status[host] = "No";
-                    document.getElementById(host+"_blink").className = "";
-                }
-                if  (request=='TurnOn' && current_status=='On') {          
-                    set_panel_status(host,'On');
+                if ((request=='TurnOff' && current_status=='Off') || (request=='TurnOn' && current_status=='On')) {          
+                    set_panel_status(host,current_status);
                     host_request_status[host] = "No";
                     document.getElementById(host+"_blink").className = "";
                 }
