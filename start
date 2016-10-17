@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd /home/pi/wolmgr
+
 PROG=app.py
 LOG_DIR=./log
 RUN_DIR=./run
